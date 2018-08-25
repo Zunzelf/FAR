@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="?attr/actionModeSelectAllDrawable" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:columnWidth="90dp"
+        android:stretchMode="columnWidth"
+        android:gravity="top"
+        />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/listDivider" />
+
+    <!--TODO : Application's layout need to be sorted out, especially graphs-->
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/rGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+
+        android:numColumns="auto_fit"
+        app:seriesColor="#e95459"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/gGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+
+        android:numColumns="auto_fit"
+        app:seriesColor="#5cde7f"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/bGraph"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+
+        android:numColumns="auto_fit"
+        app:seriesColor="#4648be"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+</android.support.design.widget.CoordinatorLayout>
