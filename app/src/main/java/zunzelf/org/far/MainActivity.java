@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
             setBarGraphSeries(graph, rgbArr.gArr, Color.GREEN);
             graph = (GraphView) findViewById(R.id.bGraph); //BLUE
             setBarGraphSeries(graph, rgbArr.bArr, Color.BLUE);
+            graph = (GraphView) findViewById(R.id.grGraph); //GRAY
+            setBarGraphSeries(graph, rgbArr.grArr, Color.GRAY);
 
 //            graph = (GraphView) findViewById(R.id.rGraph); //RED
 //            setLineGraphSeries(graph, rgbArr.rArr, Color.RED);
@@ -139,9 +141,14 @@ public class MainActivity extends AppCompatActivity {
         for (int y = 0; y < h; y++){
             for(int x = 0; x < w; x++){
                 int pixel = bitmap.getPixel(x, y);
-                arr.rArr[Color.red(pixel)] += 1;
-                arr.bArr[Color.blue(pixel)] += 1;
-                arr.gArr[Color.green(pixel)] += 1;
+                int r = Color.red(pixel);
+                int b = Color.blue(pixel);
+                int g = Color.green(pixel);
+                int gr = (int) Math.round((0.3*r)+(0.3*b)+(0.3*g));
+                arr.rArr[r] += 1;
+                arr.bArr[b] += 1;
+                arr.gArr[g] += 1;
+                arr.grArr[gr] += 1;
             }
         }
         return arr;
