@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
@@ -31,12 +32,14 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     Uri imageURI;
     TextView txt;
+    Bitmap bitmap = null;
+    RGBArr rgbArr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = (ImageView) findViewById(R.id.imageView);
 //        txt = (TextView) findViewById(R.id.tVi);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             imageURI = data.getData();
             // imageView.setImageURI(imageURI); to show image -> will uncomment when layout sorted
             // Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-            Bitmap bitmap = null;
+            bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageURI);
             } catch (IOException e) {
@@ -91,25 +94,40 @@ public class MainActivity extends AppCompatActivity {
             }
             // > Image Processes :
             // Get RGBs value per-pixel
-            RGBArr rgbArr = getRGBs(bitmap);
+            rgbArr = getRGBs(bitmap);
             // plotting to Graph :
             //  TODO : need to simplify plotting method
-            GraphView graph;
-            LineGraphSeries<DataPoint> series;       //an Object of the PointsGraphSeries for plotting scatter graphs
+            GraphView graph;       //an Object of the PointsGraphSeries for plotting scatter graphs
             graph = (GraphView) findViewById(R.id.rGraph); //RED
-            series= new LineGraphSeries<>(rgbToPlot(rgbArr.rArr));   //initializing/defining series
-            series.setColor(Color.RED);
-            graph.addSeries(series);                   //adding the series to the GraphView
+            setBarGraphSeries(graph, rgbArr.rArr, Color.RED);
             graph = (GraphView) findViewById(R.id.gGraph); //GREEN
-            series= new LineGraphSeries<>(rgbToPlot(rgbArr.gArr));   //initializing/defining series
-            graph.addSeries(series);                   //adding the series to the GraphView
-            series.setColor(Color.GREEN);
+            setBarGraphSeries(graph, rgbArr.gArr, Color.GREEN);
             graph = (GraphView) findViewById(R.id.bGraph); //BLUE
-            series= new LineGraphSeries<>(rgbToPlot(rgbArr.bArr));   //initializing/defining series
-            graph.addSeries(series);                   //adding the series to the GraphView
-            series.setColor(Color.BLUE);
+            setBarGraphSeries(graph, rgbArr.bArr, Color.BLUE);
+
+//            graph = (GraphView) findViewById(R.id.rGraph); //RED
+//            setLineGraphSeries(graph, rgbArr.rArr, Color.RED);
+//            graph = (GraphView) findViewById(R.id.gGraph); //GREEN
+//            setLineGraphSeries(graph, rgbArr.gArr, Color.GREEN);
+//            graph = (GraphView) findViewById(R.id.bGraph); //BLUE
+//            setLineGraphSeries(graph, rgbArr.bArr, Color.BLUE);
         }
 
+    }
+
+    private void setLineGraphSeries(GraphView gv, int[] vArr, int color){
+        gv.removeAllSeries();
+        LineGraphSeries<DataPoint> series;
+        series= new LineGraphSeries<>(rgbToPlot(vArr));   //initializing/defining series
+        series.setColor(color);
+        gv.addSeries(series);
+    }
+    private void setBarGraphSeries(GraphView gv, int[] vArr, int color){
+        gv.removeAllSeries();
+        BarGraphSeries<DataPoint> series;
+        series= new BarGraphSeries<>(rgbToPlot(vArr));   //initializing/defining series
+//        series.setColor(color);
+        gv.addSeries(series);
     }
 
     private RGBArr getRGBs(Bitmap bitmap){

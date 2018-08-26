@@ -14,10 +14,74 @@
         android:layout_height="wrap_content"
         android:text="RGB-G Graph from Image"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintVertical_bias="0.027" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/bGraph"
+        android:layout_width="0dp"
+        android:layout_height="125dp"
+
+        android:layout_marginTop="8dp"
+        android:numColumns="auto_fit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Teks"
+        app:seriesColor="#4648be"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/rGraph"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:numColumns="auto_fit"
+        app:layout_constraintBottom_toTopOf="@+id/gGraph"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bGraph"
+        app:layout_constraintVertical_bias="1.0"
+        app:seriesColor="#e95459"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/gGraph"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+
+        android:layout_marginTop="252dp"
+        android:numColumns="auto_fit"
+        app:layout_constraintBottom_toTopOf="@+id/grGraph"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bGraph"
+        app:layout_constraintVertical_bias="1.0"
+        app:seriesColor="#5cde7f"
+        app:seriesData="0=0"
+        app:seriesType="line" />
+
+    <com.jjoe64.graphview.helper.GraphViewXML
+        android:id="@+id/grGraph"
+        android:layout_width="0dp"
+        android:layout_height="112dp"
+
+        android:numColumns="auto_fit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:seriesColor="#5cde7f"
+        app:seriesData="0=0"
+        app:seriesType="line" />
 
 </android.support.constraint.ConstraintLayout>
