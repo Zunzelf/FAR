@@ -239,7 +239,7 @@ public class ImageProcessor {
                 Log.d("gradients", "c : "+ x +", m : "+m);
             }
             res[i] = (int) Math.round((m*i)+x);
-            Log.d("gradients", "c : "+ x +", m : "+ m +", x : "+ i +", y : "+ res[i]);
+//            Log.d("gradients", "c : "+ x +", m : "+ m +", x : "+ i +", y : "+ res[i]);
         }
         return res;
     }

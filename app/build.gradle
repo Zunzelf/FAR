@@ -5,6 +5,7 @@ android {
     defaultConfig {
         applicationId "zunzelf.org.far"
         minSdkVersion 15
+        vectorDrawables.useSupportLibrary = true
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

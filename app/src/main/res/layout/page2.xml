@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <com.jjoe64.graphview.helper.GraphViewXML
+            android:id="@+id/rGraph"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+
+            android:numColumns="auto_fit"
+            app:layout_constraintEnd_toEndOf="@id/bGraph"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:seriesColor="#e95459"
+            app:seriesData="0=0"
+            app:seriesType="line"
+            tools:layout_editor_absoluteY="90dp" />
+
+        <com.jjoe64.graphview.helper.GraphViewXML
+            android:id="@+id/bGraph"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+
+            android:numColumns="auto_fit"
+            app:layout_constraintEnd_toEndOf="@id/rGraph"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/rGraph"
+            app:seriesColor="#4648be"
+            app:seriesData="0=0"
+            app:seriesType="line"
+            tools:layout_editor_absoluteY="230dp" />
+
+
+        <com.jjoe64.graphview.helper.GraphViewXML
+            android:id="@+id/gGraph"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+
+            android:numColumns="auto_fit"
+            app:layout_constraintEnd_toEndOf="@id/acGraph"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grGraph"
+            app:layout_constraintVertical_bias="0.908"
+            app:seriesColor="#5a5e5b"
+            app:seriesData="0=0"
+            app:seriesType="line" />
+
+        <com.jjoe64.graphview.helper.GraphViewXML
+            android:id="@+id/grGraph"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+
+            android:numColumns="auto_fit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grGraph"
+            app:layout_constraintVertical_bias="0.908"
+            app:seriesColor="#5a5e5b"
+            app:seriesData="0=0"
+            app:seriesType="line" />
+
+            <com.jjoe64.graphview.helper.GraphViewXML
+                android:id="@+id/acGraph"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+
+                android:numColumns="auto_fit"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:seriesColor="#e95459"
+                app:seriesData="0=0"
+                app:seriesType="line"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <com.jjoe64.graphview.helper.GraphViewXML
+                android:id="@+id/eqGraph"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+
+                android:numColumns="auto_fit"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:seriesColor="#e95459"
+                app:seriesData="0=0"
+                app:seriesType="line"
+                tools:layout_editor_absoluteY="90dp" />
+
+            <com.jjoe64.graphview.helper.GraphViewXML
+                android:id="@+id/maskGraph"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+
+                android:numColumns="auto_fit"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:seriesColor="#e95459"
+                app:seriesData="0=0"
+                app:seriesType="line"
+                tools:layout_editor_absoluteY="90dp" />
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
