@@ -1,4 +1,4 @@
-package zunzelf.org.far;
+package zunzelf.org.far.imageProcessor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 

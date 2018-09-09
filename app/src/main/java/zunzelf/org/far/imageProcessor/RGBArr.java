@@ -1,4 +1,4 @@
-package zunzelf.org.far;
+package zunzelf.org.far.imageProcessor;
 
 public class RGBArr{
     public int[] rArr, gArr, bArr, grArr;
