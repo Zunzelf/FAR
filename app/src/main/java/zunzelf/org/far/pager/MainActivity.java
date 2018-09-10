@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -39,7 +40,13 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bitmap, mBm;
     RGBArr rgbArr;
     ScrollView sv;
+    SeekBar seekbar;
+    int[] cfd, cug, dummyArr;
+    int step = 1;
+    int max = 180;
+    int min = 60;
     double weight;
+    boolean init = false;
     ImageProcessor proc = new ImageProcessor();
 
     @Override
@@ -59,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 openGallery();
             }
         });
-
     }
 
     @Override
@@ -91,6 +97,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        seekbar = (SeekBar) findViewById(R.id.seekBar);
+        if (!init) {
+            seekbar.setOnSeekBarChangeListener(
+                    new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            Log.d("seekBar", "weight @"+weight);
+                            updateImage(weight);
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+                        }
+
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress,
+                                                      boolean fromUser) {
+                            // Ex :
+                            // And finally when you want to retrieve the value in the range you
+                            // wanted in the first place -> [3-5]
+                            //
+                            // if progress = 13 -> value = 3 + (13 * 0.1) = 4.3
+
+                            Log.d("seekBar", "progress @"+progress);
+                            weight = (progress+0.0)/100.0;
+                        }
+                    }
+            );
+            init = true;
+        }
+
         if(resultCode== RESULT_OK && requestCode == PICK_IMAGE){
             // Load Image File
             imageURI = data.getData();
@@ -108,40 +145,10 @@ public class MainActivity extends AppCompatActivity {
             }
             Log.d(TAG, "Image get!");
             // > Image Processes :
-
             // Get RGBs value per-pixel
             rgbArr = proc.RGBTOArr(bitmap);
-
-            // get cummulative histogram
-            int[] cug = proc.accHist(rgbArr.grArr, weight);
-            int[] cfd = proc.histEq(rgbArr.grArr, weight)[0];
-
-            // get equalized histogram(RGB)
-            int[][] cfdRGB = new int[3][256];
-            cfdRGB[0] = proc.histEq(rgbArr.rArr, weight)[0]; // RED
-            cfdRGB[1] = proc.histEq(rgbArr.gArr, weight)[0]; // GREEN
-            cfdRGB[2] = proc.histEq(rgbArr.bArr, weight)[0]; // BLUE
-
-            // get equalized image
-            mBm = proc.eqTransform(cfdRGB, bitmap); //equalized image
-            imageView = (ImageView) findViewById(R.id.imageView2);
-            imageView.setImageBitmap(mBm);
-
-            // get smoothed image
-            mBm = proc.smoothTransform(bitmap, 3); //Image smoothing
-            imageView = (ImageView) findViewById(R.id.imageView3);
-            imageView.setImageBitmap(mBm);
-
-            //Histogram spesification matching
-            // Histogram to match against
-            int[] specHist = proc.generateHistogram(200, 125, 300);
-            int[] dummyArr = new int[]{147,493,364,388,494,657,805,758,769,749,719,660,692,700,720,809,808,898,910,867,956,933,1167,1386,1572,1591,1489,1460,1318,1378,1363,1190,956,847,736,719,642,534,619,633,714,851,803,714,831,749,742,788,863,945,972,921,905,946,1196,1420,1159,1053,919,955,988,1090,1248,1428,1480,1429,1347,1353,1339,1465,1575,1568,1634,1718,1721,1585,1543,1381,1320,1266,1253,1216,1113,1014,1004,993,927,928,882,786,794,655,594,553,507,407,436,447,489,487,499,501,513,490,449,430,408,392,370,363,303,358,334,325,285,330,328,317,354,332,326,321,299,338,318,293,311,313,288,308,291,326,293,284,277,289,317,264,314,346,321,310,342,352,431,460,493,548,524,695,718,637,667,638,698,708,637,665,610,634,685,752,871,772,702,702,687,612,614,659,663,627,628,627,726,695,709,760,793,799,848,833,899,902,876,907,912,920,948,959,1146,1043,1196,1376,1439,1319,1279,1528,2043,1893,1625,1341,1333,1208,1168,1577,2064,2020,2035,2119,2267,2400,3005,2743,2427,2360,2271,1942,1762,2028,2509,2439,2405,2016,2040,2718,2664,3657,2890,2631,2316,1484,815,774,1115,944,1071,1213,1067,994,1085,1093,1675,1471,1160,1145,1033,891,1096,1645,2090,1872,2186,3173,2954,579};
-            int[][] masked = proc.histMatchGray(rgbArr.rArr, dummyArr, 1);
-            // apply matching histogram to image
-            mBm = proc.specTransform(cfdRGB, dummyArr, bitmap); //Histogram Match
-            imageView = (ImageView) findViewById(R.id.imageView4);
-            imageView.setImageBitmap(mBm);
-
+            // Transform Images
+            updateImage(weight);
             // plotting to Graph :
             GraphView graph;
             graph = (GraphView) findViewById(R.id.rGraph); //RED
@@ -164,12 +171,42 @@ public class MainActivity extends AppCompatActivity {
             graph = (GraphView) findViewById(R.id.maskGraph); //Filter
             graph.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
             setBarGraphSeries(graph, dummyArr, Color.GRAY);
-
-//            graph = (GraphView) findViewById(R.id.acGraph); //GRAY Accumulated histogram
-//            int[] accHisto = proc.accHist(rgbArr.grArr);
-//            setBarGraphSeries(graph, accHisto, Color.GRAY);
         }
 
+    }
+
+    private void updateImage(double weight){
+
+        // get cummulative histogram
+        cug = proc.accHist(rgbArr.grArr, weight);
+        cfd = proc.histEq(rgbArr.grArr, weight)[0];
+
+        // get equalized histogram(RGB)
+        int[][] cfdRGB = new int[3][256];
+        cfdRGB[0] = proc.histEq(rgbArr.rArr, weight)[0]; // RED
+        cfdRGB[1] = proc.histEq(rgbArr.gArr, weight)[0]; // GREEN
+        cfdRGB[2] = proc.histEq(rgbArr.bArr, weight)[0]; // BLUE
+
+        // get equalized image
+        mBm = proc.eqTransform(cfdRGB, bitmap); //equalized image
+        imageView = (ImageView) findViewById(R.id.imageView2);
+        imageView.setImageBitmap(mBm);
+        Log.d("update Image", "equalized Image update! weight@"+weight);
+        // get smoothed image
+        mBm = proc.smoothTransform(bitmap, 3); //Image smoothing
+        imageView = (ImageView) findViewById(R.id.imageView3);
+        imageView.setImageBitmap(mBm);
+
+        //Histogram spesification matching
+        // Histogram to match against
+        int[] specHist = proc.generateHistogram(200, 125, 300);
+        dummyArr = new int[]{147,493,364,388,494,657,805,758,769,749,719,660,692,700,720,809,808,898,910,867,956,933,1167,1386,1572,1591,1489,1460,1318,1378,1363,1190,956,847,736,719,642,534,619,633,714,851,803,714,831,749,742,788,863,945,972,921,905,946,1196,1420,1159,1053,919,955,988,1090,1248,1428,1480,1429,1347,1353,1339,1465,1575,1568,1634,1718,1721,1585,1543,1381,1320,1266,1253,1216,1113,1014,1004,993,927,928,882,786,794,655,594,553,507,407,436,447,489,487,499,501,513,490,449,430,408,392,370,363,303,358,334,325,285,330,328,317,354,332,326,321,299,338,318,293,311,313,288,308,291,326,293,284,277,289,317,264,314,346,321,310,342,352,431,460,493,548,524,695,718,637,667,638,698,708,637,665,610,634,685,752,871,772,702,702,687,612,614,659,663,627,628,627,726,695,709,760,793,799,848,833,899,902,876,907,912,920,948,959,1146,1043,1196,1376,1439,1319,1279,1528,2043,1893,1625,1341,1333,1208,1168,1577,2064,2020,2035,2119,2267,2400,3005,2743,2427,2360,2271,1942,1762,2028,2509,2439,2405,2016,2040,2718,2664,3657,2890,2631,2316,1484,815,774,1115,944,1071,1213,1067,994,1085,1093,1675,1471,1160,1145,1033,891,1096,1645,2090,1872,2186,3173,2954,579};
+        int[][] masked = proc.histMatchGray(rgbArr.rArr, dummyArr, 1);
+        // apply matching histogram to image
+        mBm = proc.specTransform(cfdRGB, dummyArr, bitmap); //Histogram Match
+        imageView = (ImageView) findViewById(R.id.imageView4);
+        imageView.setImageBitmap(mBm);
+        Log.d("update Image", "filtered Image update! weight@"+weight);
     }
     private void setLineGraphSeries(GraphView gv, int[] vArr, int color){
         gv.removeAllSeries();
